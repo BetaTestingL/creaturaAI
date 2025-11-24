@@ -184,5 +184,28 @@ function Contact(){
 }
 
 /* Blog */
-def_placeholder = '''
-'''
+// def_placeholder = '''
+/* Blog */
+function Blog(){
+  const posts = [
+    { id: 1, title: "How AI speeds up test automation", excerpt: "Short excerpt..." },
+    { id: 2, title: "Reducing flaky tests with ML", excerpt: "Short excerpt..." },
+  ];
+
+  return (
+    <section className="px-8 py-20">
+      <h3 className="text-3xl font-bold text-center mb-12">Blog</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        {posts.map((p) => (
+          <article key={p.id} className="p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
+            <h4 className="text-2xl font-semibold">{p.title}</h4>
+            <p className="mt-2 text-gray-700">{p.excerpt}</p>
+            <div className="mt-4">
+              <Link to="#" className="text-blue-600">Read more →</Link>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
