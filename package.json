@@ -13,7 +13,10 @@
     "react-router-dom": "^6.22.0",
     "framer-motion": "^10.16.4",
     "axios": "^1.4.0",
-    "clsx": "^1.2.1"
+    "clsx": "^1.2.1",
+    "stripe": "^12.14.0",
+    "@supabase/supabase-js": "^2.13.0",
+    "razorpay": "^2.8.0",
   },
   "devDependencies": {
     "vite": "^5.1.0",
