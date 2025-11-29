@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 export default function BusinessSite() {
   return (
@@ -346,9 +347,40 @@ function Dashboard() {
 /* -------------------- CONTACT -------------------- */
 
 function Contact() {
-  const onSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState(null);
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    alert("Requirement submitted! (Backend coming soon)");
+    setLoading(true);
+    setMsg(null);
+
+    const formData = new FormData(e.target);
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const requirements = formData.get("requirements");
+
+    try {
+      const response = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, requirements }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
+
+      setMsg("Your requirements have been submitted successfully!");
+      e.target.reset();
+    } catch (err) {
+      console.error(err);
+      setMsg(err.message || "Submission failed");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -362,27 +394,40 @@ function Contact() {
         onSubmit={onSubmit}
       >
         <input
+          name="name"
           required
           placeholder="Your Name"
           className="w-full p-3 rounded border"
         />
+
         <input
+          name="email"
           type="email"
           required
           placeholder="Email"
           className="w-full p-3 rounded border"
         />
+
         <textarea
+          name="requirements"
           required
           placeholder="Describe your project requirements..."
           className="w-full p-3 rounded h-36 border"
         />
+
         <button
           type="submit"
+          disabled={loading}
           className="w-full p-3 bg-blue-600 text-white rounded text-lg"
         >
-          Submit Requirement
+          {loading ? "Submitting..." : "Submit Requirement"}
         </button>
+
+        {msg && (
+          <p className="text-center text-lg font-medium text-green-600 mt-3">
+            {msg}
+          </p>
+        )}
       </form>
     </section>
   );
